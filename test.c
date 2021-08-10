@@ -180,14 +180,14 @@ int main(int argc, char **argv)
     /* Write WAV header */
     wav_header header = {
 	    {'R', 'I', 'F', 'F'},
-	    0,
+	    3776690,
 	    {'W', 'A', 'V', 'E'},
 	    {'f', 'm', 't', ' '},
-	    16,
+	    18,
 	    0x0003,
 	    1,
 	    48000,
-	    48000 * 2,
+	    48000 * 4,
 	    2,
 	    16,
 	    {'d', 'a', 't', 'a'},
