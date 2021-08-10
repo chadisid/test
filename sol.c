@@ -44,7 +44,7 @@ typedef struct filter_context {
     double a0, a1, a2;
     double b0, b1, b2;	
 } filter_context;
-static void filter (float *input, float *output, int len,filter_context *filter)                                     
+void filter (float *input, float *output, int len,filter_context *filter)                                     
 {                
     float *ibuf = input;                                                 
     float *obuf = output;                                                                                                         
