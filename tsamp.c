@@ -71,6 +71,7 @@ void filter(float * input, float * output, int len, filter_context * filter) {
     obuf[i] = out;
 
   }
+  if (i < len) {
   double o0 = ibuf[i] * filter -> b0 + filter -> i1 * filter -> b1 + filter -> i2 * filter -> b2 + filter -> o1 * a1 + filter -> o2 * a2;
   filter -> i2 = filter -> i1;
   filter -> i1 = ibuf[i];
