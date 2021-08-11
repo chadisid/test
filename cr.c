@@ -191,26 +191,9 @@ int main(int argc, char ** argv) {
       }
       sample_float = (temp_sample)*(1.0 / (SAMPLE_MAX + 1.0));
      
-      if(inbuf[i] < 0) {
-         if( (inbuf[i]) <= FLT_MIN / 0.5){
-          ++(clips_on);
-          temp_sample= -1 ;
-         } else {
-          temp_sample = inbuf[i]/0.5;
-         }
-      } else {
-         if(inbuf[i] >= FLT_MAX/0.5 ){
-            if(inbuf[i] > SAMPLE_MAX + 1.0 ){
-              ++(clips_on);
-              temp_sample = SAMPLE_MAX ;
-            } else {
-              temp_sample = SAMPLE_MAX ;
-            }
-         } else {
-           temp_sample = double_temp + 0.5;
-         }
-      }
       
+         if( (inbuf[i]) < FLT_MIN){
+     
       inbuf[i] = sample_float;
     }
     filter(inbuf, out_highpass, bytes, filter_highpass);
