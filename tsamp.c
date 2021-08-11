@@ -245,30 +245,30 @@ int main(int argc, char ** argv) {
       SOX_SAMPLE_LOCALS;
       sox_sample_t temp_sample_t = SOX_FLOAT_32BIT_TO_SAMPLE(inbuf[i], clips_t);
       sox_sample_t temp_sample_test;
-       /* 
+       
       double sox_macro_temp_double_temp = (inbuf[i]) * (SOX_SAMPLE_MAX + 1.0);
       if(sox_macro_temp_double_temp < 0) {
          if(sox_macro_temp_double_temp <= SOX_SAMPLE_MIN - 0.5){
           ++(clips_on);
           temp_sample_test= SOX_SAMPLE_MIN ;
          } else {
-          test_sample_test = sox_macro_temp_double - 0.5;
+          temp_sample_test = sox_macro_temp_double - 0.5;
          }
       } else {
          if(sox_macro_temp_double >= SOX_SAMPLE_MAX + 0.5 ){
             if( sox_macro_temp_double > SOX_SAMPLE_MAX + 1.0 ){
               ++(clips_on);
-              test_sample_test = SOX_SAMPLE_MAX ;
+              temp_sample_test = SOX_SAMPLE_MAX ;
             } else {
-              test_sample_test = SOX_SAMPLE_MAX ;
+              temp_sample_test = SOX_SAMPLE_MAX ;
             }
          } else {
-           test_sample_test = sox_macro_temp_double + 0.5;
+           temp_sample_test = sox_macro_temp_double + 0.5;
          }
       }
-      if (temp_sample_t != test_sample_test){
+      if (temp_sample_t != temp_sample_test){
         fprintf(stderr," Samples are not same \n");
-        } */
+        } 
       float temp_sample_float = SOX_SAMPLE_TO_FLOAT_32BIT(temp_sample_t, clips_two);
       inbuf[i] = temp_sample_float;
     }
