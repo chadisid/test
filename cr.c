@@ -171,27 +171,27 @@ int main(int argc, char ** argv) {
     int i;
     for (i = 0; i < bytes; i++) {
       int32_t temp_sample_test;
-      double sox_macro_temp_double_temp = (inbuf[i]) * (SOX_SAMPLE_MAX + 1.0);
+      double sox_macro_temp_double_temp = (inbuf[i]) * (SAMPLE_MAX + 1.0);
       if(sox_macro_temp_double_temp < 0) {
-         if(sox_macro_temp_double_temp <= SOX_SAMPLE_MIN - 0.5){
+         if(sox_macro_temp_double_temp <= SAMPLE_MIN - 0.5){
           ++(clips_on);
-          temp_sample_test= SOX_SAMPLE_MIN ;
+          temp_sample_test= SAMPLE_MIN ;
          } else {
           temp_sample_test = sox_macro_temp_double_temp - 0.5;
          }
       } else {
-         if(sox_macro_temp_double_temp >= SOX_SAMPLE_MAX + 0.5 ){
-            if( sox_macro_temp_double_temp > SOX_SAMPLE_MAX + 1.0 ){
+         if(sox_macro_temp_double_temp >= SAMPLE_MAX + 0.5 ){
+            if( sox_macro_temp_double_temp > SAMPLE_MAX + 1.0 ){
               ++(clips_on);
-              temp_sample_test = SOX_SAMPLE_MAX ;
+              temp_sample_test = SAMPLE_MAX ;
             } else {
-              temp_sample_test = SOX_SAMPLE_MAX ;
+              temp_sample_test = SAMPLE_MAX ;
             }
          } else {
            temp_sample_test = sox_macro_temp_double_temp + 0.5;
          }
       }
-      float temp_sample_float_t = (temp_sample_test)*(1.0 / (SOX_SAMPLE_MAX + 1.0));
+      float temp_sample_float_t = (temp_sample_test)*(1.0 / (SAMPLE_MAX + 1.0));
       inbuf[i] = temp_sample_float_t;
     }
     filter(inbuf, out_highpass, bytes, filter_highpass);
