@@ -162,7 +162,7 @@ int main(int argc, char ** argv) {
   size_t clips_on = 0;
   int32_t temp_sample;
   double double_temp;
-  float sample_float
+  float sample_float;
   while (current_offset < data_size) {
     bytes = fread(inbuf, sizeof(float), num_samples, f);
     current_offset += sizeof(float) * bytes;
