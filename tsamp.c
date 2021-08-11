@@ -170,11 +170,7 @@ int main(int argc, char ** argv) {
     current_offset += sizeof(float) * bytes;
     int i;
     for (i = 0; i < bytes; i++) {
-      /*SOX_SAMPLE_LOCALS;
-      sox_sample_t temp_sample_t = SOX_FLOAT_32BIT_TO_SAMPLE(inbuf[i], clips_t);
-      */
       sox_sample_t temp_sample_test;
-       
       double sox_macro_temp_double_temp = (inbuf[i]) * (SOX_SAMPLE_MAX + 1.0);
       if(sox_macro_temp_double_temp < 0) {
          if(sox_macro_temp_double_temp <= SOX_SAMPLE_MIN - 0.5){
@@ -195,18 +191,7 @@ int main(int argc, char ** argv) {
            temp_sample_test = sox_macro_temp_double_temp + 0.5;
          }
       }
-      /*if (temp_sample_t != temp_sample_test){
-        fprintf(stderr," Samples are not same \n");
-        } else{
-        //fprintf(stderr," Samples are same \n");
-        }*/
-      //float temp_sample_float = SOX_SAMPLE_TO_FLOAT_32BIT(temp_sample_t, clips_two);
       float temp_sample_float_t = (temp_sample_test)*(1.0 / (SOX_SAMPLE_MAX + 1.0));
-      /*if (temp_sample_float != temp_sample_float_t){
-        fprintf(stderr," Samples are not same \n");
-        } else{
-        //fprintf(stderr," Samples are same \n");
-        }*/
       inbuf[i] = temp_sample_float_t;
     }
     filter(inbuf, out_highpass, bytes, filter_highpass);
