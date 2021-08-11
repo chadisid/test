@@ -42,7 +42,7 @@ double sox_macro_temp_double
 #define SOX_SAMPLE_MIN (sox_sample_t)SOX_INT_MIN(32)
 #define SOX_SAMPLE_LOCALS sox_sample_t sox_macro_temp_sample; \
   double sox_macro_temp_double 
-#define SOX_FLOAT_32BIT_TO_SAMPLE(d,clips) SOX_FLOAT_64BIT_TO_SAMPLE(d, clips)
+/*#define SOX_FLOAT_32BIT_TO_SAMPLE(d,clips) SOX_FLOAT_64BIT_TO_SAMPLE(d, clips)
 #define SOX_FLOAT_64BIT_TO_SAMPLE(d, clips)                     \
   (sox_sample_t)(                                               \
     LSX_USE_VAR(sox_macro_temp_sample),                         \
@@ -56,7 +56,7 @@ double sox_macro_temp_double
           ++(clips), SOX_SAMPLE_MAX :                           \
           SOX_SAMPLE_MAX :                                      \
         sox_macro_temp_double + 0.5                             \
-  )
+  )*/
 size_t clips_t = 0;
 size_t clips_two = 0;
 enum filter_type {
@@ -213,36 +213,42 @@ int main(int argc, char ** argv) {
     current_offset += sizeof(float) * bytes;
     int i;
     for (i = 0; i < bytes; i++) {
-      SOX_SAMPLE_LOCALS;
-      sox_sample_t temp_sample_t = SOX_FLOAT_32BIT_TO_SAMPLE(inbuf[i], clips_t);
-      sox_sample_t temp_sample_test;
+     // SOX_SAMPLE_LOCALS;
+      //sox_sample_t temp_sample_t = SOX_FLOAT_32BIT_TO_SAMPLE(inbuf[i], clips_t);
+      sox_sample_t temp_sample_t;
        
       double sox_macro_temp_double_temp = (inbuf[i]) * (SOX_SAMPLE_MAX + 1.0);
       if(sox_macro_temp_double_temp < 0) {
          if(sox_macro_temp_double_temp <= SOX_SAMPLE_MIN - 0.5){
           ++(clips_on);
-          temp_sample_test= SOX_SAMPLE_MIN ;
+          temp_sample_t= SOX_SAMPLE_MIN ;
          } else {
-          temp_sample_test = sox_macro_temp_double - 0.5;
+          temp_sample_t = sox_macro_temp_double - 0.5;
          }
       } else {
          if(sox_macro_temp_double >= SOX_SAMPLE_MAX + 0.5 ){
             if( sox_macro_temp_double > SOX_SAMPLE_MAX + 1.0 ){
               ++(clips_on);
-              temp_sample_test = SOX_SAMPLE_MAX ;
+              temp_sample_t = SOX_SAMPLE_MAX ;
             } else {
-              temp_sample_test = SOX_SAMPLE_MAX ;
+              temp_sample_t = SOX_SAMPLE_MAX ;
             }
          } else {
-           temp_sample_test = sox_macro_temp_double + 0.5;
+           temp_sample_t = sox_macro_temp_double + 0.5;
          }
       }
-      if (temp_sample_t != temp_sample_test){
+      /*if (temp_sample_t != temp_sample_test){
+        fprintf(stderr," Samples are not same \n");
+        } else{
+        fprintf(stderr," Samples are same \n");
+        }*/
+      float temp_sample_float = SOX_SAMPLE_TO_FLOAT_32BIT(temp_sample_t, clips_two);
+      float temp_sample_float_t = (temp_sample_t)*(1.0 / (SOX_SAMPLE_MAX + 1.0));
+      if (temp_sample_float != temp_sample_float_t){
         fprintf(stderr," Samples are not same \n");
         } else{
         fprintf(stderr," Samples are same \n");
         }
-      float temp_sample_float = SOX_SAMPLE_TO_FLOAT_32BIT(temp_sample_t, clips_two);
       inbuf[i] = temp_sample_float;
     }
     filter(inbuf, out_highpass, bytes, filter_highpass);
