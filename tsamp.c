@@ -36,15 +36,9 @@ double sox_macro_temp_double
   )
   */
 #define SOX_INT_MIN(bits) (1 <<((bits)-1))
-
-
 #define SOX_INT_MAX(bits) (((unsigned)-1)>>(33-(bits)))
-
-
 #define SOX_SAMPLE_MAX (sox_sample_t)SOX_INT_MAX(32)
 #define SOX_SAMPLE_TO_FLOAT_32BIT(d,clips) ((d)*(1.0 / (SOX_SAMPLE_MAX + 1.0)))
-
-
 #define SOX_SAMPLE_MIN (sox_sample_t)SOX_INT_MIN(32)
 #define SOX_SAMPLE_LOCALS sox_sample_t sox_macro_temp_sample; \
   double sox_macro_temp_double 
