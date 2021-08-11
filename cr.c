@@ -9,11 +9,6 @@
 #include <math.h>
 
 #define PI 3.14159265359
-/*#define SOX_INT_MIN(bits) (1 <<((bits)-1))
-#define SOX_INT_MAX(bits) (((unsigned)-1)>>(33-(bits)))
-#define SAMPLE_MAX (int32_t)SOX_INT_MAX(32)
-#define SAMPLE_MIN (int32_t)SOX_INT_MIN(32) 
-*/
 #define SAMPLE_MIN (1 << 31)
 #define SAMPLE_MAX (((unsigned)-1)>>1)
 enum filter_type {
@@ -165,34 +160,36 @@ int main(int argc, char ** argv) {
     exit(1);
   }
   size_t clips_on = 0;
+  int32_t temp_sample;
+  double double_temp;
+  float sample_float
   while (current_offset < data_size) {
     bytes = fread(inbuf, sizeof(float), num_samples, f);
     current_offset += sizeof(float) * bytes;
     int i;
     for (i = 0; i < bytes; i++) {
-      int32_t temp_sample_test;
-      double double_temp = (inbuf[i]) * (SAMPLE_MAX + 1.0);
+      double_temp = (inbuf[i]) * (SAMPLE_MAX + 1.0);
       if(double_temp < 0) {
          if(double_temp <= SAMPLE_MIN - 0.5){
           ++(clips_on);
-          temp_sample_test= SAMPLE_MIN ;
+          temp_sample= SAMPLE_MIN ;
          } else {
-          temp_sample_test = double_temp - 0.5;
+          temp_sample = double_temp - 0.5;
          }
       } else {
          if(double_temp >= SAMPLE_MAX + 0.5 ){
             if(double_temp > SAMPLE_MAX + 1.0 ){
               ++(clips_on);
-              temp_sample_test = SAMPLE_MAX ;
+              temp_sample = SAMPLE_MAX ;
             } else {
-              temp_sample_test = SAMPLE_MAX ;
+              temp_sample = SAMPLE_MAX ;
             }
          } else {
-           temp_sample_test = double_temp + 0.5;
+           temp_sample = double_temp + 0.5;
          }
       }
-      float temp_sample_float_t = (temp_sample_test)*(1.0 / (SAMPLE_MAX + 1.0));
-      inbuf[i] = temp_sample_float_t;
+      sample_float = (temp_sample)*(1.0 / (SAMPLE_MAX + 1.0));
+      inbuf[i] = sample_float;
     }
     filter(inbuf, out_highpass, bytes, filter_highpass);
     filter(out_highpass, out_lowpass, bytes, filter_lowpass);
