@@ -161,14 +161,15 @@ int main(int argc, char ** argv) {
   }
   size_t clips_on = 0;
   int32_t temp_sample;
-  double double_temp;
-  float sample_float;
+  double double_temp, double_test;
+  float sample_float, test_sample_float;
   while (current_offset < data_size) {
     bytes = fread(inbuf, sizeof(float), num_samples, f);
     current_offset += sizeof(float) * bytes;
     int i;
     for (i = 0; i < bytes; i++) {
       double_temp = (inbuf[i]) * (SAMPLE_MAX + 1.0);
+      
       if(double_temp < 0) {
          if(double_temp <= SAMPLE_MIN - 0.5){
           ++(clips_on);
@@ -189,6 +190,26 @@ int main(int argc, char ** argv) {
          }
       }
       sample_float = (temp_sample)*(1.0 / (SAMPLE_MAX + 1.0));
+     
+      if(inbuf[i] < 0) {
+         if( (inbuf[i]) <= FLT_MIN / 0.5){
+          ++(clips_on);
+          temp_sample= -1 ;
+         } else {
+          temp_sample = inbuf[i]/0.5;
+         }
+      } else {
+         if(inbuf[i] >= FLT_MAX/0.5 ){
+            if(inbuf[i] > SAMPLE_MAX + 1.0 ){
+              ++(clips_on);
+              temp_sample = SAMPLE_MAX ;
+            } else {
+              temp_sample = SAMPLE_MAX ;
+            }
+         } else {
+           temp_sample = double_temp + 0.5;
+         }
+      }
       
       inbuf[i] = sample_float;
     }
