@@ -8,13 +8,11 @@
 
 #include <math.h>
 
-typedef int32_t sox_int32_t;
-typedef sox_int32_t sox_sample_t;
 #define PI 3.14159265359
 #define SOX_INT_MIN(bits) (1 <<((bits)-1))
 #define SOX_INT_MAX(bits) (((unsigned)-1)>>(33-(bits)))
-#define SOX_SAMPLE_MAX (int32_t)SOX_INT_MAX(32)
-#define SOX_SAMPLE_MIN (int32_t)SOX_INT_MIN(32) 
+#define SAMPLE_MAX (int32_t)SOX_INT_MAX(32)
+#define SAMPLE_MIN (int32_t)SOX_INT_MIN(32) 
 
 enum filter_type {
   highpass,
