@@ -244,7 +244,7 @@ int main(int argc, char ** argv) {
         //fprintf(stderr," Samples are same \n");
         }*/
       //float temp_sample_float = SOX_SAMPLE_TO_FLOAT_32BIT(temp_sample_t, clips_two);
-      float temp_sample_float_t = (temp_sample_t)*(1.0 / (SOX_SAMPLE_MAX + 1.0));
+      float temp_sample_float_t = (temp_sample_test)*(1.0 / (SOX_SAMPLE_MAX + 1.0));
       /*if (temp_sample_float != temp_sample_float_t){
         fprintf(stderr," Samples are not same \n");
         } else{
