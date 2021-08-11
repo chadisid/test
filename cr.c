@@ -135,7 +135,7 @@ int main(int argc, char ** argv) {
     exit(1);
   }
   int bytes;
-  double frequency_lowpass = 500;
+  double frequency_lowpass = 300;
   double frequency_highpass = 200;
   int sample_rate = 48000;
   filter_context * filter_lowpass = init_filter(frequency_lowpass, sample_rate, lowpass);
