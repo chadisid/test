@@ -212,7 +212,9 @@ int main(int argc, char ** argv) {
            test_sample_test = sox_macro_temp_double + 0.5;
          }
       }
-      if (temp_sample_t != )
+      if (temp_sample_t != test_sample_test){
+        fprintf(stderr," Samples are not same \n");
+        }
       float temp_sample_float = SOX_SAMPLE_TO_FLOAT_32BIT(temp_sample_t, clips_two);
       inbuf[i] = temp_sample_float;
     }
