@@ -216,7 +216,7 @@ int main(int argc, char ** argv) {
     }
     fwrite(out_lowpass, sizeof(float), bytes, outfile);
   }
-  printf("current offset %lld data_size %lld clips %i clips_two %i \n", current_offset, data_size, clips_t, clips_two);
+  printf("current offset %lld data_size %lld clips %i", current_offset, data_size, clips_on);
   fflush(outfile);
   free(filter_highpass);
   free(filter_lowpass);
