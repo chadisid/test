@@ -8,13 +8,9 @@
 
 #include <math.h>
 
-typedef int32_t sox_int32_t;
-typedef sox_int32_t sox_sample_t;
 #define PI 3.14159265359
-#define SOX_INT_MIN(bits) (1 <<((bits)-1))
-#define SOX_INT_MAX(bits) (((unsigned)-1)>>(33-(bits)))
-#define SOX_SAMPLE_MAX (sox_sample_t)SOX_INT_MAX(32)
-#define SOX_SAMPLE_MIN (sox_sample_t)SOX_INT_MIN(32) 
+#define SAMPLE_MAX (int32_t)(1 <<((32)-1))
+#define SAMPLE_MIN (int32_t)(((unsigned)-1)>>(33-(bits)))
 
 enum filter_type {
   highpass,
@@ -170,28 +166,28 @@ int main(int argc, char ** argv) {
     current_offset += sizeof(float) * bytes;
     int i;
     for (i = 0; i < bytes; i++) {
-      sox_sample_t temp_sample_test;
-      double sox_macro_temp_double_temp = (inbuf[i]) * (SOX_SAMPLE_MAX + 1.0);
+      int32_t temp_sample_test;
+      double sox_macro_temp_double_temp = (inbuf[i]) * (SAMPLE_MAX + 1.0);
       if(sox_macro_temp_double_temp < 0) {
-         if(sox_macro_temp_double_temp <= SOX_SAMPLE_MIN - 0.5){
+         if(sox_macro_temp_double_temp <= SAMPLE_MIN - 0.5){
           ++(clips_on);
-          temp_sample_test= SOX_SAMPLE_MIN ;
+          temp_sample_test= SAMPLE_MIN ;
          } else {
           temp_sample_test = sox_macro_temp_double_temp - 0.5;
          }
       } else {
-         if(sox_macro_temp_double_temp >= SOX_SAMPLE_MAX + 0.5 ){
-            if( sox_macro_temp_double_temp > SOX_SAMPLE_MAX + 1.0 ){
+         if(sox_macro_temp_double_temp >= SAMPLE_MAX + 0.5 ){
+            if( sox_macro_temp_double_temp > SAMPLE_MAX + 1.0 ){
               ++(clips_on);
-              temp_sample_test = SOX_SAMPLE_MAX ;
+              temp_sample_test = SAMPLE_MAX ;
             } else {
-              temp_sample_test = SOX_SAMPLE_MAX ;
+              temp_sample_test = SAMPLE_MAX ;
             }
          } else {
            temp_sample_test = sox_macro_temp_double_temp + 0.5;
          }
       }
-      float temp_sample_float_t = (temp_sample_test)*(1.0 / (SOX_SAMPLE_MAX + 1.0));
+      float temp_sample_float_t = (temp_sample_test)*(1.0 / (SAMPLE_MAX + 1.0));
       inbuf[i] = temp_sample_float_t;
     }
     filter(inbuf, out_highpass, bytes, filter_highpass);
