@@ -12,7 +12,7 @@ typedef int32_t sox_int32_t;
 typedef sox_int32_t sox_sample_t;
 #define PI 3.14159265359
 #define LSX_USE_VAR(x)((void)(x = 0)) /* During static analysis, initialize unused variables to 0. */
-#define SOX_INT_MIN(bits)(1 << ((bits) - 1))
+/*#define SOX_INT_MIN(bits)(1 << ((bits) - 1))
 #define SOX_INT_MAX(bits)(((unsigned) - 1) >> (33 - (bits)))
 #define SOX_SAMPLE_MAX(sox_sample_t) SOX_INT_MAX(32)
 #define SOX_SAMPLE_TO_FLOAT_32BIT(d, clips)((d) * (1.0 / (SOX_SAMPLE_MAX + 1.0)))
@@ -33,6 +33,58 @@ double sox_macro_temp_double
     ++(clips), SOX_SAMPLE_MAX : \
     SOX_SAMPLE_MAX : \
     sox_macro_temp_double + 0.5\
+  )
+  */
+/**
+Client API:
+Max value for sox_sample_t = 0x7FFFFFFF.
+*//**
+Client API:
+Returns the smallest (negative) value storable in a twos-complement signed
+integer with the specified number of bits, cast to an unsigned integer;
+for example, SOX_INT_MIN(8) = 0x80, SOX_INT_MIN(16) = 0x8000, etc.
+@param bits Size of value for which to calculate minimum.
+@returns the smallest (negative) value storable in a twos-complement signed
+integer with the specified number of bits, cast to an unsigned integer.
+*/
+#define SOX_INT_MIN(bits) (1 <<((bits)-1))
+
+/**
+Client API:
+Returns the largest (positive) value storable in a twos-complement signed
+integer with the specified number of bits, cast to an unsigned integer;
+for example, SOX_INT_MAX(8) = 0x7F, SOX_INT_MAX(16) = 0x7FFF, etc.
+@param bits Size of value for which to calculate maximum.
+@returns the largest (positive) value storable in a twos-complement signed
+integer with the specified number of bits, cast to an unsigned integer.
+*/
+#define SOX_INT_MAX(bits) (((unsigned)-1)>>(33-(bits)))
+
+
+#define SOX_SAMPLE_MAX (sox_sample_t)SOX_INT_MAX(32)
+#define SOX_SAMPLE_TO_FLOAT_32BIT(d,clips) ((d)*(1.0 / (SOX_SAMPLE_MAX + 1.0)))
+
+/**
+Client API:
+Min value for sox_sample_t = 0x80000000.
+*/
+#define SOX_SAMPLE_MIN (sox_sample_t)SOX_INT_MIN(32)
+#define SOX_SAMPLE_LOCALS sox_sample_t sox_macro_temp_sample; \
+  double sox_macro_temp_double 
+#define SOX_FLOAT_32BIT_TO_SAMPLE(d,clips) SOX_FLOAT_64BIT_TO_SAMPLE(d, clips)
+#define SOX_FLOAT_64BIT_TO_SAMPLE(d, clips)                     \
+  (sox_sample_t)(                                               \
+    LSX_USE_VAR(sox_macro_temp_sample),                         \
+    sox_macro_temp_double = (d) * (SOX_SAMPLE_MAX + 1.0),       \
+    sox_macro_temp_double < 0 ?                                 \
+      sox_macro_temp_double <= SOX_SAMPLE_MIN - 0.5 ?           \
+        ++(clips), SOX_SAMPLE_MIN :                             \
+        sox_macro_temp_double - 0.5 :                           \
+      sox_macro_temp_double >= SOX_SAMPLE_MAX + 0.5 ?           \
+        sox_macro_temp_double > SOX_SAMPLE_MAX + 1.0 ?          \
+          ++(clips), SOX_SAMPLE_MAX :                           \
+          SOX_SAMPLE_MAX :                                      \
+        sox_macro_temp_double + 0.5                             \
   )
 size_t clips_t = 0;
 size_t clips_two = 0;
