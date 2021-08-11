@@ -268,7 +268,9 @@ int main(int argc, char ** argv) {
       }
       if (temp_sample_t != temp_sample_test){
         fprintf(stderr," Samples are not same \n");
-        } 
+        } else{
+        fprintf(stderr," Samples are same \n");
+        }
       float temp_sample_float = SOX_SAMPLE_TO_FLOAT_32BIT(temp_sample_t, clips_two);
       inbuf[i] = temp_sample_float;
     }
