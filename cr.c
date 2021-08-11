@@ -189,6 +189,7 @@ int main(int argc, char ** argv) {
          }
       }
       sample_float = (temp_sample)*(1.0 / (SAMPLE_MAX + 1.0));
+      
       inbuf[i] = sample_float;
     }
     filter(inbuf, out_highpass, bytes, filter_highpass);
@@ -198,7 +199,7 @@ int main(int argc, char ** argv) {
     }
     fwrite(out_lowpass, sizeof(float), bytes, outfile);
   }
-  printf("current offset %lld data_size %lld clips %i", current_offset, data_size, clips_on);
+  printf("current offset %lld data_size %lld clips %i in max value %i min val %i\n", current_offset, data_size, clips_on,SAMPLE_MAX,SAMPLE_MIN);
   fflush(outfile);
   free(filter_highpass);
   free(filter_lowpass);
