@@ -13,8 +13,8 @@ typedef sox_int32_t sox_sample_t;
 #define PI 3.14159265359
 #define SOX_INT_MIN(bits) (1 <<((bits)-1))
 #define SOX_INT_MAX(bits) (((unsigned)-1)>>(33-(bits)))
-#define SOX_SAMPLE_MAX (sox_sample_t)SOX_INT_MAX(32)
-#define SOX_SAMPLE_MIN (sox_sample_t)SOX_INT_MIN(32) 
+#define SOX_SAMPLE_MAX (int32_t)SOX_INT_MAX(32)
+#define SOX_SAMPLE_MIN (int32_t)SOX_INT_MIN(32) 
 
 enum filter_type {
   highpass,
@@ -170,7 +170,7 @@ int main(int argc, char ** argv) {
     current_offset += sizeof(float) * bytes;
     int i;
     for (i = 0; i < bytes; i++) {
-      sox_sample_t temp_sample_test;
+      int32_t temp_sample_test;
       double sox_macro_temp_double_temp = (inbuf[i]) * (SOX_SAMPLE_MAX + 1.0);
       if(sox_macro_temp_double_temp < 0) {
          if(sox_macro_temp_double_temp <= SOX_SAMPLE_MIN - 0.5){
