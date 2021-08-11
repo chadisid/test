@@ -176,7 +176,7 @@ int main(int argc, char ** argv) {
   filter_context * filter_highpass = init_filter(frequency_highpass, sample_rate, highpass);
   if (!filter_highpass) {
     fprintf(stderr, "Could not initialize high pass filter\n");
-    free(filter_lowpass)
+    free(filter_lowpass);
     free(out_highpass);
     free(out_lowpass);
     free(inbuf);
