@@ -10,8 +10,8 @@
 #include <math.h>
 
 #define PI 3.14159265359
-#define SAMPLE_MIN(1 << 31)
-#define SAMPLE_MAX(((unsigned) - 1) >> 1)
+#define SAMPLE_MIN (1 << 31)
+#define SAMPLE_MAX (((unsigned)-1)>>1)
 enum filter_type {
   highpass,
   lowpass,
