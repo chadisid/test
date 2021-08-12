@@ -101,7 +101,7 @@ int main(int argc, char ** argv) {
   int ret, num_samples = 1024, bytes, sample_rate = 48000, temp_sample, i;
   const char * outfilename, * filename;
   FILE * f, * outfile;
-  int64_t data_size, current_offset;
+  int64_t data_size = 0, current_offset = 0;
   double frequency_lowpass = 300, frequency_highpass = 200, double_temp;
   size_t clips_on = 0;
   float sample_float;
