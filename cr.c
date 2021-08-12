@@ -192,6 +192,7 @@ int main(int argc, char ** argv) {
       sample_float = (temp_sample)*(1.0 / (SAMPLE_MAX + 1.0));
       
       inbuf[i] = inbuf[i]/128;
+      /*
          if( (inbuf[i]) < 0){
             if(inbuf[i]< -0.5) ){
               test_sample_float = -1;
@@ -204,7 +205,7 @@ int main(int argc, char ** argv) {
                } else{
                  test_sample_float = inbuf[i];
                }
-           }
+           }*/
           if(sample_float != test_sample_float) {
             printf("samples are not same\n");
             }
