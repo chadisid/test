@@ -110,7 +110,7 @@ int main(int argc, char ** argv) {
     exit(1);
   }
   filename = argv[1];
-  ret = check_file(filensme);
+  ret = check_file(filename);
   if (ret < 0)
     exit(1);
   outfilename = argv[2];
