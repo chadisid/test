@@ -84,16 +84,39 @@ filter_context * init_filter(double frequency, int sample_rate, enum filter_type
     break;
   }
   return filter;
+} 
+int check_file(const char *filename){
+  char *dot = strchr(filename, '.');
+  if(!dot) {
+    fprintf(stderr, "Dosent end with extension %s\n",filename);
+    return -1;
+}
+  if (strcmp(dot, ".raw") != 0 ){
+      fprintf(stderr, "Dosent end with extension raw %s\n",filename);
+    return -1;
+    }
+  return 0;
 }
 int main(int argc, char ** argv) {
+  int ret, num_samples = 1024, bytes, sample_rate = 48000, temp_sample, i;
   const char * outfilename, * filename;
   FILE * f, * outfile;
+  int64_t data_size, current_offset;
+  double frequency_lowpass = 300, frequency_highpass = 200, double_temp;
+  size_t clips_on = 0;
+  float sample_float;
   if (argc != 3) {
     fprintf(stderr, "Usage: %s <input file> <output file>\n", argv[0]);
     exit(1);
   }
   filename = argv[1];
+  ret = check_file(filensme);
+  if (ret < 0)
+    exit(1);
   outfilename = argv[2];
+  ret = check_file(outfilename);
+  if(ret < 0)
+    exit(1);
   f = fopen(filename, "rb");
   if (!f) {
     fprintf(stderr, "Could not open %s\n", filename);
@@ -105,11 +128,9 @@ int main(int argc, char ** argv) {
     fclose(f);
     exit(1);
   }
-  int64_t data_size, current_offset;
   fseek(f, 0, SEEK_END);
   data_size = ftell(f);
   fseek(f, 0, SEEK_SET);
-  int num_samples = 1024;
   float * inbuf = (float * ) malloc(sizeof(float) * num_samples);
   if (!inbuf) {
     fprintf(stderr, "Could not allocate memory\n");
@@ -134,10 +155,6 @@ int main(int argc, char ** argv) {
     fclose(f);
     exit(1);
   }
-  int bytes;
-  double frequency_lowpass = 300;
-  double frequency_highpass = 200;
-  int sample_rate = 48000;
   filter_context * filter_lowpass = init_filter(frequency_lowpass, sample_rate, lowpass);
   if (!filter_lowpass) {
     fprintf(stderr, "Could not initialize low pass filter\n");
@@ -159,17 +176,11 @@ int main(int argc, char ** argv) {
     fclose(f);
     exit(1);
   }
-  size_t clips_on = 0;
-  int32_t temp_sample;
-  double double_temp, double_test;
-  float sample_float, test_sample_float;
   while (current_offset < data_size) {
     bytes = fread(inbuf, sizeof(float), num_samples, f);
     current_offset += sizeof(float) * bytes;
-    int i;
     for (i = 0; i < bytes; i++) {
       double_temp = (inbuf[i]) * (SAMPLE_MAX + 1.0);
-      
       if(double_temp < 0) {
          if(double_temp <= SAMPLE_MIN - 0.5){
           ++(clips_on);
@@ -190,25 +201,6 @@ int main(int argc, char ** argv) {
          }
       }
       sample_float = (temp_sample)*(1.0 / (SAMPLE_MAX + 1.0));
-      
-      inbuf[i] = inbuf[i]/128;
-      
-         if( (inbuf[i]) < 0){
-            if(inbuf[i]< -0.5){
-              test_sample_float = -1;
-           } else{
-              test_sample_float = inbuf[i];
-           }
-          } else{
-             if(inbuf[i] > 0.5) {
-               test_sample_float =  1;
-               } else{
-                 test_sample_float = inbuf[i];
-               }
-           }
-          if(sample_float != test_sample_float) {
-            printf("samples are not same\n");
-            }
       inbuf[i] = sample_float;
     }
     filter(inbuf, out_highpass, bytes, filter_highpass);
